@@ -4256,6 +4256,9 @@ fn column_width_refits_wrapped_rows() {
     s.execute("home.columnWidth", json!({"cols": "A:A", "width": 64})).unwrap();
     assert_eq!(height(&s, 0), Some(narrow), "and grows back when it narrows");
     assert_eq!(height(&s, 1), Some(40.0), "a row sized by hand keeps its height");
+    // A width of 0 hides the column; the row keeps its height instead of fitting a zero-wide cell.
+    s.execute("home.columnWidth", json!({"cols": "A:A", "width": 0})).unwrap();
+    assert_eq!(height(&s, 0), Some(narrow), "hiding the column leaves the row as it was");
 }
 
 /// Programmatic callers lay out a sheet that isn't the active one: `sheet` (or a `Sheet!` prefix on
